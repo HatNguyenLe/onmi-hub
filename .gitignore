@@ -21,3 +21,9 @@ rad.json
 *.flf
 #Test results file
 TestResults.xml
+
+### OmniHub ###
+.venv/
+data/
+__pycache__/
+*.pyc

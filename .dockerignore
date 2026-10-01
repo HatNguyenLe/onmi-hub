@@ -1,0 +1,10 @@
+.git
+.gitignore
+.venv
+.vscode
+data
+**/__pycache__
+**/*.pyc
+Dockerfile
+docker-compose*.yml
+run.ps1

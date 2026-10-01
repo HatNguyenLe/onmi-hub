@@ -1,0 +1,10 @@
+# Usage: TORCH_INDEX_URL=https://download.pytorch.org/whl/cu124 docker compose -f docker-compose.yml -f docker-compose.gpu.yml up -d --build
+services:
+  omnihub:
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]

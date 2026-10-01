@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#0f1117">
+  <title>OmniHub NLP</title>
+  <script>
+    (function () {
+      var t = localStorage.getItem("theme");
+      if (!t) t = matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+      document.documentElement.dataset.theme = t;
+    })();
+  </script>
+  <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <symbol id="i-chat" viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></symbol>
+    <symbol id="i-hub" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></symbol>
+    <symbol id="i-box" viewBox="0 0 24 24"><path d="M21 16V8a2 2 0 0 0-1-1.7l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.7l7 4a2 2 0 0 0 2 0l7-4a2 2 0 0 0 1-1.7z"/><path d="M3.3 7 12 12l8.7-5M12 22V12"/></symbol>
+    <symbol id="i-tune" viewBox="0 0 24 24"><path d="M4 21v-7M4 10V3M12 21v-9M12 8V3M20 21v-5M20 12V3M1 14h6M9 8h6M17 16h6"/></symbol>
+    <symbol id="i-gear" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></symbol>
+    <symbol id="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></symbol>
+    <symbol id="i-moon" viewBox="0 0 24 24"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></symbol>
+    <symbol id="i-menu" viewBox="0 0 24 24"><path d="M3 6h18M3 12h18M3 18h18"/></symbol>
+    <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+    <symbol id="i-send" viewBox="0 0 24 24"><path d="m22 2-7 20-4-9-9-4z"/><path d="M22 2 11 13"/></symbol>
+    <symbol id="i-stop" viewBox="0 0 24 24"><rect x="6" y="6" width="12" height="12" rx="2"/></symbol>
+    <symbol id="i-trash" viewBox="0 0 24 24"><path d="M3 6h18M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2m3 0-1 14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2L4 6"/></symbol>
+    <symbol id="i-download" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></symbol>
+    <symbol id="i-heart" viewBox="0 0 24 24"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 0 0-7.8 7.8l1 1.1L12 21l7.8-7.5 1-1.1a5.5 5.5 0 0 0 0-7.8z"/></symbol>
+    <symbol id="i-sliders" viewBox="0 0 24 24"><path d="M4 6h10M18 6h2M4 12h4M12 12h8M4 18h12M20 18h0"/><circle cx="16" cy="6" r="2"/><circle cx="10" cy="12" r="2"/><circle cx="18" cy="18" r="2"/></symbol>
+    <symbol id="i-history" viewBox="0 0 24 24"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5M12 7v5l4 2"/></symbol>
+    <symbol id="i-copy" viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></symbol>
+    <symbol id="i-refresh" viewBox="0 0 24 24"><path d="M21 12a9 9 0 0 1-15 6.7L3 16M3 12a9 9 0 0 1 15-6.7L21 8"/><path d="M21 3v5h-5M3 21v-5h5"/></symbol>
+    <symbol id="i-x" viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></symbol>
+    <symbol id="i-edit" viewBox="0 0 24 24"><path d="M12 20h9M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/></symbol>
+    <symbol id="i-upload" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M17 8l-5-5-5 5M12 3v12"/></symbol>
+    <symbol id="i-spark" viewBox="0 0 24 24"><path d="M12 3l1.9 5.8L20 10.7l-6.1 1.9L12 18.5l-1.9-5.9L4 10.7l6.1-1.9z"/></symbol>
+  </svg>
+
+  <div class="app">
+    <aside class="sidebar" id="sidebar">
+      <div class="brand">
+        <div class="brand-logo"><svg><use href="#i-spark"/></svg></div>
+        <div>
+          <div class="brand-name">OmniHub</div>
+          <div class="brand-sub">NLP Studio</div>
+        </div>
+      </div>
+      <nav class="nav">
+        <a href="#/chat" data-view="chat"><svg><use href="#i-chat"/></svg><span>Chat</span></a>
+        <a href="#/hub" data-view="hub"><svg><use href="#i-hub"/></svg><span>Model Hub</span></a>
+        <a href="#/models" data-view="models"><svg><use href="#i-box"/></svg><span>Model của tôi</span></a>
+        <a href="#/finetune" data-view="finetune"><svg><use href="#i-tune"/></svg><span>Fine-tuning</span></a>
+        <a href="#/settings" data-view="settings"><svg><use href="#i-gear"/></svg><span>Cài đặt</span></a>
+      </nav>
+      <div class="sidebar-footer">
+        <div class="device-pill" id="devicePill">Đang kiểm tra thiết bị...</div>
+        <button class="btn btn-ghost theme-toggle" id="themeToggle" type="button" aria-label="Đổi giao diện sáng/tối">
+          <svg class="icon-sun"><use href="#i-sun"/></svg>
+          <svg class="icon-moon"><use href="#i-moon"/></svg>
+          <span class="theme-label"></span>
+        </button>
+      </div>
+    </aside>
+    <div class="backdrop" id="backdrop"></div>
+
+    <div class="main">
+      <header class="topbar">
+        <button class="icon-btn" id="menuBtn" type="button" aria-label="Mở menu"><svg><use href="#i-menu"/></svg></button>
+        <div class="topbar-title" id="topbarTitle">Chat</div>
+        <button class="icon-btn" id="topThemeBtn" type="button" aria-label="Đổi giao diện">
+          <svg class="icon-sun"><use href="#i-sun"/></svg>
+          <svg class="icon-moon"><use href="#i-moon"/></svg>
+        </button>
+      </header>
+
+      <!-- CHAT -->
+      <section class="view view-chat" id="view-chat">
+        <div class="history" id="historyPanel">
+          <div class="history-head">
+            <button class="btn btn-primary btn-block" id="newChatBtn" type="button"><svg><use href="#i-plus"/></svg>Cuộc trò chuyện mới</button>
+            <input class="input" id="historySearch" type="search" placeholder="Tìm trong lịch sử...">
+          </div>
+          <div class="history-list" id="historyList"></div>
+          <div class="history-foot">
+            <button class="btn btn-ghost btn-sm btn-danger-text" id="clearHistoryBtn" type="button"><svg><use href="#i-trash"/></svg>Xoá toàn bộ lịch sử</button>
+          </div>
+        </div>
+        <div class="history-backdrop" id="historyBackdrop"></div>
+
+        <div class="chat">
+          <div class="chat-head">
+            <button class="icon-btn history-toggle" id="historyToggle" type="button" aria-label="Lịch sử"><svg><use href="#i-history"/></svg></button>
+            <select class="select model-select" id="chatModelSelect" aria-label="Chọn model"></select>
+            <span class="badge" id="chatTaskBadge"></span>
+            <div class="spacer"></div>
+            <button class="icon-btn" id="paramsToggle" type="button" aria-label="Tham số sinh"><svg><use href="#i-sliders"/></svg></button>
+          </div>
+
+          <div class="params-panel" id="paramsPanel" hidden>
+            <label class="field">
+              <span>System prompt</span>
+              <textarea class="input" id="systemPrompt" rows="2" placeholder="Bạn là trợ lý AI hữu ích..."></textarea>
+            </label>
+            <div class="params-grid">
+              <label class="field"><span>Temperature <b id="tempVal">0.7</b></span><input type="range" id="pTemp" min="0" max="2" step="0.05" value="0.7"></label>
+              <label class="field"><span>Top-p <b id="topPVal">0.9</b></span><input type="range" id="pTopP" min="0.05" max="1" step="0.05" value="0.9"></label>
+              <label class="field"><span>Max tokens <b id="maxTokVal">256</b></span><input type="range" id="pMaxTok" min="16" max="2048" step="16" value="256"></label>
+              <label class="field"><span>Repetition penalty <b id="repVal">1.1</b></span><input type="range" id="pRep" min="1" max="2" step="0.05" value="1.1"></label>
+            </div>
+          </div>
+
+          <div class="messages" id="messages"></div>
+
+          <form class="composer" id="composer">
+            <div class="composer-box">
+              <textarea id="chatInput" rows="1" placeholder="Nhập tin nhắn... (Enter để gửi, Shift+Enter xuống dòng)"></textarea>
+              <button class="send-btn" id="sendBtn" type="submit" aria-label="Gửi"><svg><use href="#i-send"/></svg></button>
+            </div>
+            <div class="composer-hint" id="composerHint"></div>
+          </form>
+        </div>
+      </section>
+
+      <!-- HUB -->
+      <section class="view page" id="view-hub">
+        <div class="page-head">
+          <div>
+            <h1>Model Hub</h1>
+            <p class="muted">Tìm kiếm và tải các model NLP từ Hugging Face về hệ thống.</p>
+          </div>
+        </div>
+        <form class="toolbar" id="hubForm">
+          <input class="input grow" id="hubQuery" type="search" placeholder="Tìm model, ví dụ: Qwen, phobert, vit5...">
+          <select class="select" id="hubTask"><option value="">Tất cả tác vụ NLP</option></select>
+          <select class="select" id="hubSort">
+            <option value="downloads">Lượt tải</option>
+            <option value="likes">Lượt thích</option>
+            <option value="trending_score">Xu hướng</option>
+            <option value="last_modified">Mới cập nhật</option>
+          </select>
+          <button class="btn btn-primary" type="submit"><svg><use href="#i-hub"/></svg>Tìm</button>
+        </form>
+        <div class="grid cards" id="hubResults"></div>
+      </section>
+
+      <!-- MODELS -->
+      <section class="view page" id="view-models">
+        <div class="page-head">
+          <div>
+            <h1>Model của tôi</h1>
+            <p class="muted">Các model đã tải về và model đã fine-tune.</p>
+          </div>
+          <div class="seg" id="modelFilter">
+            <button type="button" class="active" data-filter="all">Tất cả</button>
+            <button type="button" data-filter="hub">Từ Hub</button>
+            <button type="button" data-filter="finetuned">Fine-tuned</button>
+          </div>
+        </div>
+        <div class="grid cards" id="localModels"></div>
+      </section>
+
+      <!-- FINETUNE -->
+      <section class="view page" id="view-finetune">
+        <div class="page-head">
+          <div>
+            <h1>Fine-tuning</h1>
+            <p class="muted">Chọn model gốc, dataset và tham số để huấn luyện model của riêng bạn.</p>
+          </div>
+        </div>
+        <div class="ft-layout">
+          <form class="card ft-form" id="ftForm">
+            <h3>1. Model &amp; tác vụ</h3>
+            <div class="form-grid">
+              <label class="field"><span>Model gốc</span><select class="select" id="ftBase" required></select></label>
+              <label class="field"><span>Loại fine-tune</span>
+                <select class="select" id="ftTask">
+                  <option value="causal-lm">Causal LM (sinh văn bản / chat)</option>
+                  <option value="seq2seq">Seq2Seq (tóm tắt, dịch, T5...)</option>
+                  <option value="classification">Phân loại văn bản</option>
+                </select>
+              </label>
+              <label class="field full"><span>Tên model đầu ra</span><input class="input" id="ftOutput" required pattern="[A-Za-z0-9][A-Za-z0-9_.\-]*" placeholder="my-finetuned-model"></label>
+            </div>
+
+            <h3>2. Dataset</h3>
+            <div class="seg" id="dsSource">
+              <button type="button" class="active" data-src="upload">Tải file lên</button>
+              <button type="button" data-src="hub">Hugging Face Dataset</button>
+            </div>
+            <div id="dsUpload" class="ds-pane">
+              <label class="dropzone" id="dropzone">
+                <input type="file" id="dsFile" accept=".csv,.json,.jsonl,.txt" hidden>
+                <svg><use href="#i-upload"/></svg>
+                <span>Kéo thả hoặc bấm để chọn file <b>.csv .json .jsonl .txt</b></span>
+              </label>
+              <label class="field"><span>Hoặc chọn dataset đã tải</span><select class="select" id="dsExisting"><option value="">-- Chọn --</option></select></label>
+            </div>
+            <div id="dsHub" class="ds-pane" hidden>
+              <div class="form-grid">
+                <label class="field"><span>Tên dataset</span><input class="input" id="dsHubName" placeholder="vd: imdb, tatsu-lab/alpaca"></label>
+                <label class="field"><span>Config (tuỳ chọn)</span><input class="input" id="dsHubConfig"></label>
+                <label class="field"><span>Split</span><input class="input" id="dsHubSplit" value="train"></label>
+                <div class="field"><span>&nbsp;</span><button class="btn" type="button" id="dsHubPreviewBtn">Xem trước</button></div>
+              </div>
+            </div>
+            <div id="dsPreview" class="ds-preview"></div>
+
+            <h3>3. Ánh xạ cột</h3>
+            <div class="form-grid" id="colMapping"></div>
+
+            <h3>4. Siêu tham số</h3>
+            <div class="form-grid three">
+              <label class="field"><span>Epochs</span><input class="input" type="number" id="hpEpochs" value="3" min="0.1" max="100" step="0.1"></label>
+              <label class="field"><span>Learning rate</span><input class="input" type="number" id="hpLr" value="0.00005" step="any" min="0"></label>
+              <label class="field"><span>Batch size</span><input class="input" type="number" id="hpBatch" value="4" min="1" max="512"></label>
+              <label class="field"><span>Grad. accumulation</span><input class="input" type="number" id="hpAccum" value="1" min="1" max="512"></label>
+              <label class="field"><span>Max length</span><input class="input" type="number" id="hpMaxLen" value="512" min="16" max="32768"></label>
+              <label class="field"><span>Warmup ratio</span><input class="input" type="number" id="hpWarmup" value="0.05" min="0" max="0.99" step="0.01"></label>
+              <label class="field"><span>Weight decay</span><input class="input" type="number" id="hpWd" value="0" min="0" max="1" step="0.01"></label>
+              <label class="field"><span>Tỉ lệ eval</span><input class="input" type="number" id="hpEval" value="0.1" min="0" max="0.49" step="0.01"></label>
+              <label class="field"><span>Giới hạn mẫu (0 = tất cả)</span><input class="input" type="number" id="hpMaxSamples" value="0" min="0"></label>
+            </div>
+            <label class="switch"><input type="checkbox" id="hpLora"><span class="slider"></span>Dùng LoRA (tiết kiệm bộ nhớ, nhanh hơn)</label>
+            <div class="form-grid three" id="loraOpts" hidden>
+              <label class="field"><span>LoRA r</span><input class="input" type="number" id="hpLoraR" value="8" min="1" max="256"></label>
+              <label class="field"><span>LoRA alpha</span><input class="input" type="number" id="hpLoraAlpha" value="16" min="1" max="512"></label>
+              <label class="field"><span>LoRA dropout</span><input class="input" type="number" id="hpLoraDrop" value="0.05" min="0" max="0.9" step="0.01"></label>
+            </div>
+            <div class="form-actions">
+              <button class="btn btn-primary" type="submit"><svg><use href="#i-tune"/></svg>Bắt đầu fine-tune</button>
+            </div>
+          </form>
+
+          <div class="ft-jobs">
+            <div class="section-title">Các job huấn luyện</div>
+            <div id="jobList" class="job-list"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- SETTINGS -->
+      <section class="view page" id="view-settings">
+        <div class="page-head"><div><h1>Cài đặt</h1><p class="muted">Cấu hình hệ thống và giao diện.</p></div></div>
+        <div class="settings-grid">
+          <div class="card">
+            <h3>Hugging Face Token</h3>
+            <p class="muted">Cần thiết cho model/dataset riêng tư hoặc gated (Llama, Gemma...). Token chỉ lưu trên máy chủ cục bộ.</p>
+            <form id="tokenForm" class="toolbar">
+              <input class="input grow" id="hfToken" type="password" autocomplete="off" placeholder="hf_xxx...">
+              <button class="btn btn-primary" type="submit">Lưu</button>
+              <button class="btn" type="button" id="clearToken">Xoá</button>
+            </form>
+            <div class="muted small" id="tokenStatus"></div>
+          </div>
+          <div class="card">
+            <h3>Giao diện</h3>
+            <div class="seg" id="themeSeg">
+              <button type="button" data-theme-opt="light"><svg><use href="#i-sun"/></svg>Sáng</button>
+              <button type="button" data-theme-opt="dark"><svg><use href="#i-moon"/></svg>Tối</button>
+              <button type="button" data-theme-opt="system">Theo hệ thống</button>
+            </div>
+          </div>
+          <div class="card">
+            <h3>Hệ thống</h3>
+            <dl class="kv" id="sysInfo"></dl>
+            <button class="btn btn-sm" type="button" id="unloadBtn">Giải phóng model khỏi bộ nhớ</button>
+          </div>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <div class="modal" id="modal" hidden>
+    <div class="modal-card" role="dialog" aria-modal="true">
+      <div class="modal-head">
+        <h3 id="modalTitle"></h3>
+        <button class="icon-btn" type="button" data-close aria-label="Đóng"><svg><use href="#i-x"/></svg></button>
+      </div>
+      <div class="modal-body" id="modalBody"></div>
+      <div class="modal-foot" id="modalFoot"></div>
+    </div>
+  </div>
+  <div class="toasts" id="toasts"></div>
+
+  <script type="module" src="/js/app.js"></script>
+</body>
+</html>

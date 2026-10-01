@@ -1,0 +1,21 @@
+services:
+  omnihub:
+    build:
+      context: .
+      args:
+        TORCH_INDEX_URL: ${TORCH_INDEX_URL:-https://download.pytorch.org/whl/cpu}
+    image: omnihub-nlp:latest
+    container_name: omnihub
+    restart: unless-stopped
+    # The app has no authentication: bound to localhost only. Put a reverse proxy with auth in front before exposing it.
+    ports:
+      - "${OMNI_BIND:-127.0.0.1}:${OMNI_PORT:-8000}:8000"
+    environment:
+      - HF_TOKEN=${HF_TOKEN:-}
+      - OMNI_MAX_UPLOAD_MB=${OMNI_MAX_UPLOAD_MB:-200}
+    volumes:
+      - omnihub-data:/data
+    shm_size: "2gb"
+
+volumes:
+  omnihub-data:
