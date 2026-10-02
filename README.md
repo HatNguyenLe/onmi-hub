@@ -14,7 +14,7 @@ Hệ thống tải, quản lý, **chat** và **fine-tune** các model NLP từ [
 
 1. [Kiến trúc](#kiến-trúc)
 2. [Yêu cầu hệ thống](#yêu-cầu-hệ-thống)
-3. [Cài đặt & chạy](#cài-đặt--chạy)
+3. [Cài đặt &amp; chạy](#cài-đặt--chạy)
 4. [Hướng dẫn sử dụng](#hướng-dẫn-sử-dụng)
 5. [Định dạng dataset cho fine-tune](#định-dạng-dataset-cho-fine-tune)
 6. [Model gợi ý](#model-gợi-ý)
@@ -41,13 +41,13 @@ flowchart LR
     INF --> DISK
 ```
 
-| Thành phần | Công nghệ |
-|---|---|
-| Backend | FastAPI, Uvicorn |
-| ML | PyTorch, Transformers 5.x, Datasets, PEFT (LoRA), Accelerate |
-| Hub | huggingface_hub 1.x |
-| Lưu trữ | SQLite (model, hội thoại, tin nhắn, job, cài đặt) + file trên đĩa |
-| Frontend | HTML/CSS/JS thuần (ES modules), không cần build |
+| Thành phần | Công nghệ                                                                |
+| ------------ | -------------------------------------------------------------------------- |
+| Backend      | FastAPI, Uvicorn                                                           |
+| ML           | PyTorch, Transformers 5.x, Datasets, PEFT (LoRA), Accelerate               |
+| Hub          | huggingface_hub 1.x                                                        |
+| Lưu trữ    | SQLite (model, hội thoại, tin nhắn, job, cài đặt) + file trên đĩa |
+| Frontend     | HTML/CSS/JS thuần (ES modules), không cần build                         |
 
 Một số đặc điểm thiết kế:
 
@@ -60,12 +60,12 @@ Một số đặc điểm thiết kế:
 
 ## Yêu cầu hệ thống
 
-| | Tối thiểu | Khuyến nghị |
-|---|---|---|
-| Python | 3.11+ (đã thử với 3.12, 3.13) | 3.12 |
-| RAM | 4 GB | 16 GB+ |
-| Ổ đĩa | 5 GB trống | 50 GB+ (mỗi model 0.5 – 15 GB) |
-| GPU | Không bắt buộc | NVIDIA có CUDA (tự động phát hiện) |
+|          | Tối thiểu                       | Khuyến nghị                            |
+| -------- | --------------------------------- | ---------------------------------------- |
+| Python   | 3.11+ (đã thử với 3.12, 3.13) | 3.12                                     |
+| RAM      | 4 GB                              | 16 GB+                                   |
+| Ổ đĩa | 5 GB trống                       | 50 GB+ (mỗi model 0.5 – 15 GB)         |
+| GPU      | Không bắt buộc                 | NVIDIA có CUDA (tự động phát hiện) |
 
 > Trên CPU nên dùng model ≤ 1.5B tham số để chat, ≤ 0.5B (hoặc bật LoRA) để fine-tune.
 
@@ -121,6 +121,17 @@ docker compose up -d --build        # cập nhật sau khi sửa code
 docker volume inspect onmi-hub_omnihub-data   # xem nơi lưu dữ liệu
 ```
 
+## Installation: Cấu hình server
+
+Hệ điều hành: Ubuntu Server 24.04 LTS.
+CPU: 8 vCPU.
+RAM: 32 GB.
+GPU: 1 GPU NVIDIA có tối thiểu 16 GB VRAM, tương thích CUDA 12.4
+Ổ đĩa: tối thiểu 100 GB SSD/NVMe, khuyến nghị cấp 200 GB để lưu model, dataset, dữ liệu chat và các bản fine-tune.
+Mạng: cho phép kết nối HTTPS đi ra Hugging Face (huggingface.co và các dịch vụ tải file của Hugging Face); cung cấp domain hoặc địa chỉ truy cập nội bộ và chứng chỉ TLS.
+Cổng: chỉ mở HTTPS (443) qua reverse proxy có xác thực; cổng ứng dụng 8000 để nội bộ, không public trực tiếp.
+Vận hành: cho phép chạy Docker Engine và Docker Compose; hỗ trợ tự khởi động lại container và sao lưu thư mục dữ liệu ứng dụng.
+
 ---
 
 ## Hướng dẫn sử dụng
@@ -134,16 +145,16 @@ docker volume inspect onmi-hub_omnihub-data   # xem nơi lưu dữ liệu
 
 Các tác vụ NLP được hỗ trợ:
 
-| Tác vụ | Chat được? | Fine-tune được? |
-|---|---|---|
-| `text-generation` (Sinh văn bản) | ✅ hội thoại nhiều lượt | ✅ Causal LM |
-| `text2text-generation`, `summarization`, `translation` | ✅ (dùng tin nhắn cuối) | ✅ Seq2Seq |
-| `text-classification` | ✅ hiển thị nhãn + xác suất | ✅ Phân loại |
-| `token-classification` (NER) | ✅ hiển thị thực thể | – |
-| `question-answering` | ✅ | – |
-| `fill-mask` | ✅ | – |
-| `zero-shot-classification` | ✅ | – |
-| `sentence-similarity`, `feature-extraction` | ✅ | – |
+| Tác vụ                                                     | Chat được?                    | Fine-tune được? |
+| ------------------------------------------------------------ | -------------------------------- | ------------------ |
+| `text-generation` (Sinh văn bản)                         | ✅ hội thoại nhiều lượt     | ✅ Causal LM       |
+| `text2text-generation`, `summarization`, `translation` | ✅ (dùng tin nhắn cuối)       | ✅ Seq2Seq         |
+| `text-classification`                                      | ✅ hiển thị nhãn + xác suất | ✅ Phân loại     |
+| `token-classification` (NER)                               | ✅ hiển thị thực thể         | –                 |
+| `question-answering`                                       | ✅                               | –                 |
+| `fill-mask`                                                | ✅                               | –                 |
+| `zero-shot-classification`                                 | ✅                               | –                 |
+| `sentence-similarity`, `feature-extraction`              | ✅                               | –                 |
 
 > Chỉ các model có định dạng PyTorch/Safetensors cho thư viện `transformers` mới được liệt kê. File ONNX, TF, Flax, GGUF... được bỏ qua khi tải để tiết kiệm dung lượng.
 
@@ -161,13 +172,13 @@ Các tác vụ NLP được hỗ trợ:
 - **Enter** để gửi, **Shift + Enter** để xuống dòng. Bấm nút ■ để dừng sinh.
 - Biểu tượng ⚙ (thanh trượt) mở bảng tham số:
 
-| Tham số | Ý nghĩa | Gợi ý |
-|---|---|---|
-| System prompt | Chỉ dẫn vai trò cho model | "Bạn là trợ lý AI trả lời bằng tiếng Việt." |
-| Temperature | Độ sáng tạo (0 = luôn chọn từ xác suất cao nhất) | 0.6 – 0.8 |
-| Top-p | Lấy mẫu nucleus | 0.9 |
-| Max tokens | Độ dài tối đa câu trả lời | 256 – 512 trên CPU |
-| Repetition penalty | Phạt lặp từ | 1.1 |
+| Tham số           | Ý nghĩa                                                  | Gợi ý                                              |
+| ------------------ | ---------------------------------------------------------- | ---------------------------------------------------- |
+| System prompt      | Chỉ dẫn vai trò cho model                               | "Bạn là trợ lý AI trả lời bằng tiếng Việt." |
+| Temperature        | Độ sáng tạo (0 = luôn chọn từ xác suất cao nhất) | 0.6 – 0.8                                           |
+| Top-p              | Lấy mẫu nucleus                                          | 0.9                                                  |
+| Max tokens         | Độ dài tối đa câu trả lời                          | 256 – 512 trên CPU                                 |
+| Repetition penalty | Phạt lặp từ                                             | 1.1                                                  |
 
 - Tham số được lưu trong trình duyệt; system prompt & model được lưu theo từng hội thoại.
 - Dưới mỗi tin nhắn: **Sao chép**, **Tạo lại** (cho câu trả lời cuối).
@@ -181,11 +192,11 @@ Các tác vụ NLP được hỗ trợ:
 
 **Định dạng nhập cho model không phải sinh văn bản** (dùng dòng `---` làm phân cách):
 
-| Tác vụ | Cách nhập |
-|---|---|
-| Hỏi đáp | `câu hỏi` ↵ `---` ↵ `đoạn ngữ cảnh` |
-| Zero-shot | `văn bản` ↵ `---` ↵ `nhãn1, nhãn2, nhãn3` |
-| Fill-mask | Câu có chứa `[MASK]` (hoặc `<mask>`) |
+| Tác vụ                 | Cách nhập                                                           |
+| ------------------------ | --------------------------------------------------------------------- |
+| Hỏi đáp               | `câu hỏi` ↵ `---` ↵ `đoạn ngữ cảnh`                     |
+| Zero-shot                | `văn bản` ↵ `---` ↵ `nhãn1, nhãn2, nhãn3`                |
+| Fill-mask                | Câu có chứa`[MASK]` (hoặc `<mask>`)                           |
 | Độ tương đồng câu | `câu A` ↵ `---` ↵ `câu B` (nhập 1 câu → trả về vector) |
 
 ### 4. Fine-tuning
@@ -208,19 +219,19 @@ Các tác vụ NLP được hỗ trợ:
 
 **Bước 4 — Siêu tham số**
 
-| Tham số | Mặc định | Ghi chú |
-|---|---|---|
-| Epochs | 3 | Số lượt duyệt dữ liệu |
-| Learning rate | 5e-5 | LoRA thường dùng 1e-4 – 3e-4 |
-| Batch size | 4 | Giảm nếu thiếu bộ nhớ |
-| Grad. accumulation | 1 | Batch hiệu dụng = batch size × giá trị này |
-| Max length | 512 | Số token tối đa mỗi mẫu |
-| Warmup ratio | 0.05 | Tỉ lệ bước khởi động LR (0 – 0.99) |
-| Weight decay | 0 | |
-| Tỉ lệ eval | 0.1 | Tách tập đánh giá (0 = không đánh giá) |
-| Giới hạn mẫu | 0 | 0 = dùng toàn bộ; đặt nhỏ để thử nhanh |
-| LoRA | tắt | Chỉ huấn luyện adapter nhỏ → nhanh & ít bộ nhớ; adapter được **merge** vào model khi lưu |
-| LoRA r / alpha / dropout | 8 / 16 / 0.05 | |
+| Tham số                 | Mặc định   | Ghi chú                                                                                                   |
+| ------------------------ | ------------- | ---------------------------------------------------------------------------------------------------------- |
+| Epochs                   | 3             | Số lượt duyệt dữ liệu                                                                                |
+| Learning rate            | 5e-5          | LoRA thường dùng 1e-4 – 3e-4                                                                           |
+| Batch size               | 4             | Giảm nếu thiếu bộ nhớ                                                                                 |
+| Grad. accumulation       | 1             | Batch hiệu dụng = batch size × giá trị này                                                           |
+| Max length               | 512           | Số token tối đa mỗi mẫu                                                                               |
+| Warmup ratio             | 0.05          | Tỉ lệ bước khởi động LR (0 – 0.99)                                                                 |
+| Weight decay             | 0             |                                                                                                            |
+| Tỉ lệ eval             | 0.1           | Tách tập đánh giá (0 = không đánh giá)                                                            |
+| Giới hạn mẫu          | 0             | 0 = dùng toàn bộ; đặt nhỏ để thử nhanh                                                            |
+| LoRA                     | tắt          | Chỉ huấn luyện adapter nhỏ → nhanh & ít bộ nhớ; adapter được**merge** vào model khi lưu |
+| LoRA r / alpha / dropout | 8 / 16 / 0.05 |                                                                                                            |
 
 **Theo dõi job** (cột bên phải): trạng thái, % tiến độ, epoch, loss train / eval, biểu đồ loss (đường liền = train, đường đứt = eval), nhật ký chi tiết. Có thể **Huỷ** job đang chạy/đang chờ. Khi hoàn tất, bấm **Chat** để thử ngay model mới.
 
@@ -282,20 +293,20 @@ Nhãn có thể là chuỗi hoặc số; cần ít nhất 2 nhãn khác nhau. T�
 
 **Chat trên CPU:**
 
-| Model | Dung lượng | Ghi chú |
-|---|---|---|
-| `Qwen/Qwen2.5-0.5B-Instruct` | ~1 GB | Nhanh, tiếng Việt khá — khuyến nghị bắt đầu |
-| `Qwen/Qwen2.5-1.5B-Instruct` | ~3 GB | Chất lượng tốt hơn |
-| `HuggingFaceTB/SmolLM2-360M-Instruct` | ~0.7 GB | Rất nhẹ, chủ yếu tiếng Anh |
-| `TinyLlama/TinyLlama-1.1B-Chat-v1.0` | ~2.2 GB | Tiếng Anh |
+| Model                                   | Dung lượng | Ghi chú                                             |
+| --------------------------------------- | ------------ | ---------------------------------------------------- |
+| `Qwen/Qwen2.5-0.5B-Instruct`          | ~1 GB        | Nhanh, tiếng Việt khá — khuyến nghị bắt đầu |
+| `Qwen/Qwen2.5-1.5B-Instruct`          | ~3 GB        | Chất lượng tốt hơn                              |
+| `HuggingFaceTB/SmolLM2-360M-Instruct` | ~0.7 GB      | Rất nhẹ, chủ yếu tiếng Anh                      |
+| `TinyLlama/TinyLlama-1.1B-Chat-v1.0`  | ~2.2 GB      | Tiếng Anh                                           |
 
 **Fine-tune / tác vụ khác:**
 
-| Mục đích | Model |
-|---|---|
-| Phân loại tiếng Việt | `vinai/phobert-base`, `xlm-roberta-base` |
-| Tóm tắt / sinh tiếng Việt | `VietAI/vit5-base` |
-| Thử nghiệm nhanh pipeline | `sshleifer/tiny-gpt2` (model ngẫu nhiên, chỉ để test) |
+| Mục đích                   | Model                                                        |
+| ----------------------------- | ------------------------------------------------------------ |
+| Phân loại tiếng Việt      | `vinai/phobert-base`, `xlm-roberta-base`                 |
+| Tóm tắt / sinh tiếng Việt | `VietAI/vit5-base`                                         |
+| Thử nghiệm nhanh pipeline   | `sshleifer/tiny-gpt2` (model ngẫu nhiên, chỉ để test) |
 
 ---
 
@@ -303,20 +314,20 @@ Nhãn có thể là chuỗi hoặc số; cần ít nhất 2 nhãn khác nhau. T�
 
 Biến môi trường:
 
-| Biến | Mặc định | Mô tả |
-|---|---|---|
-| `OMNI_DATA_DIR` | `./data` (`/data` trong Docker) | Thư mục chứa DB, model, dataset |
-| `OMNI_MAX_UPLOAD_MB` | `200` | Dung lượng tối đa file dataset tải lên |
-| `HF_TOKEN` | – | Token Hugging Face (token lưu trong **Cài đặt** được ưu tiên) |
-| `HF_HOME` | mặc định của HF (`/data/hf-cache` trong Docker) | Cache của Hugging Face (dataset Hub...) |
+| Biến                  | Mặc định                                           | Mô tả                                                                     |
+| ---------------------- | ----------------------------------------------------- | --------------------------------------------------------------------------- |
+| `OMNI_DATA_DIR`      | `./data` (`/data` trong Docker)                   | Thư mục chứa DB, model, dataset                                          |
+| `OMNI_MAX_UPLOAD_MB` | `200`                                               | Dung lượng tối đa file dataset tải lên                                |
+| `HF_TOKEN`           | –                                                    | Token Hugging Face (token lưu trong**Cài đặt** được ưu tiên) |
+| `HF_HOME`            | mặc định của HF (`/data/hf-cache` trong Docker) | Cache của Hugging Face (dataset Hub...)                                    |
 
 Biến cho Docker Compose:
 
-| Biến | Mặc định | Mô tả |
-|---|---|---|
-| `OMNI_BIND` | `127.0.0.1` | Địa chỉ host để publish cổng |
-| `OMNI_PORT` | `8000` | Cổng trên host |
-| `TORCH_INDEX_URL` | CPU wheels | Đổi sang `.../whl/cu124` để build bản GPU |
+| Biến               | Mặc định   | Mô tả                                         |
+| ------------------- | ------------- | ----------------------------------------------- |
+| `OMNI_BIND`       | `127.0.0.1` | Địa chỉ host để publish cổng              |
+| `OMNI_PORT`       | `8000`      | Cổng trên host                                |
+| `TORCH_INDEX_URL` | CPU wheels    | Đổi sang`.../whl/cu124` để build bản GPU |
 
 ---
 
@@ -324,28 +335,28 @@ Biến cho Docker Compose:
 
 Tài liệu tương tác (Swagger) có sẵn tại **http://127.0.0.1:8000/docs**.
 
-| Method | Endpoint | Mô tả |
-|---|---|---|
-| GET | `/api/system` | Thiết bị, danh sách tác vụ, model đang nạp |
-| GET / PUT | `/api/settings` | Xem / cập nhật HF token |
-| GET | `/api/hub/models?q=&task=&sort=&limit=` | Tìm model trên Hub |
-| GET | `/api/hub/models/{repo_id}` | Chi tiết model trên Hub |
-| POST | `/api/models/download` | `{ "repo_id": "Qwen/Qwen2.5-0.5B-Instruct" }` |
-| GET | `/api/models` | Danh sách model cục bộ (kèm tiến độ tải) |
-| DELETE | `/api/models/{id}` | Xoá model |
-| POST | `/api/models/unload` | Giải phóng model khỏi bộ nhớ |
-| GET | `/api/conversations?q=` | Danh sách / tìm kiếm hội thoại |
-| POST | `/api/conversations` | `{ model_id, title?, system_prompt? }` |
-| GET / PATCH / DELETE | `/api/conversations/{id}` | Xem (kèm tin nhắn) / sửa / xoá |
-| DELETE | `/api/conversations` | Xoá toàn bộ lịch sử |
-| POST | `/api/conversations/{id}/messages` | Gửi tin nhắn, trả về **SSE stream** |
-| GET | `/api/datasets` | Dataset đã tải lên |
-| POST | `/api/datasets/upload` | Upload (multipart, field `file`) |
-| DELETE | `/api/datasets/{id}` | Xoá dataset |
-| POST | `/api/datasets/hub-preview` | `{ name, config?, split }` |
-| GET / POST | `/api/finetune/jobs` | Danh sách / tạo job |
-| GET / DELETE | `/api/finetune/jobs/{id}` | Chi tiết / xoá job |
-| POST | `/api/finetune/jobs/{id}/cancel` | Huỷ job |
+| Method               | Endpoint                                  | Mô tả                                           |
+| -------------------- | ----------------------------------------- | ------------------------------------------------- |
+| GET                  | `/api/system`                           | Thiết bị, danh sách tác vụ, model đang nạp |
+| GET / PUT            | `/api/settings`                         | Xem / cập nhật HF token                         |
+| GET                  | `/api/hub/models?q=&task=&sort=&limit=` | Tìm model trên Hub                              |
+| GET                  | `/api/hub/models/{repo_id}`             | Chi tiết model trên Hub                         |
+| POST                 | `/api/models/download`                  | `{ "repo_id": "Qwen/Qwen2.5-0.5B-Instruct" }`   |
+| GET                  | `/api/models`                           | Danh sách model cục bộ (kèm tiến độ tải)  |
+| DELETE               | `/api/models/{id}`                      | Xoá model                                        |
+| POST                 | `/api/models/unload`                    | Giải phóng model khỏi bộ nhớ                 |
+| GET                  | `/api/conversations?q=`                 | Danh sách / tìm kiếm hội thoại               |
+| POST                 | `/api/conversations`                    | `{ model_id, title?, system_prompt? }`          |
+| GET / PATCH / DELETE | `/api/conversations/{id}`               | Xem (kèm tin nhắn) / sửa / xoá                |
+| DELETE               | `/api/conversations`                    | Xoá toàn bộ lịch sử                          |
+| POST                 | `/api/conversations/{id}/messages`      | Gửi tin nhắn, trả về**SSE stream**      |
+| GET                  | `/api/datasets`                         | Dataset đã tải lên                            |
+| POST                 | `/api/datasets/upload`                  | Upload (multipart, field`file`)                 |
+| DELETE               | `/api/datasets/{id}`                    | Xoá dataset                                      |
+| POST                 | `/api/datasets/hub-preview`             | `{ name, config?, split }`                      |
+| GET / POST           | `/api/finetune/jobs`                    | Danh sách / tạo job                             |
+| GET / DELETE         | `/api/finetune/jobs/{id}`               | Chi tiết / xoá job                              |
+| POST                 | `/api/finetune/jobs/{id}/cancel`        | Huỷ job                                          |
 
 **Ví dụ gửi tin nhắn:**
 
@@ -432,17 +443,17 @@ onmi-hub/
 
 ## Xử lý sự cố
 
-| Vấn đề | Cách xử lý |
-|---|---|
-| Tìm kiếm Hub lỗi / timeout | Kiểm tra kết nối Internet, proxy; model gated cần token |
-| Tải model báo lỗi 401/403 | Model gated/private → chấp nhận điều khoản trên Hugging Face và nhập token |
-| "Tải xuống bị gián đoạn" | Server bị tắt khi đang tải → bấm **Thử lại** |
-| Hết RAM khi chat | Dùng model nhỏ hơn, giảm Max tokens, bấm **Giải phóng model** |
-| Hết RAM/VRAM khi fine-tune | Bật LoRA, giảm batch size (tăng grad. accumulation), giảm max length, đặt giới hạn mẫu |
-| Model trả lời lặp / vô nghĩa | Dùng model *Instruct/Chat*, tăng repetition penalty, giảm temperature |
-| Không nạp được model ("trust_remote_code") | Model yêu cầu code tuỳ biến — chọn model khác |
-| Dataset báo thiếu cột | Kiểm tra lại ánh xạ cột ở bước 3; CSV có BOM/dấu phẩy phải đúng định dạng |
-| Job ở trạng thái "Server khởi động lại" | Server tắt khi đang huấn luyện → tạo lại job |
-| Cổng 8000 đã bị dùng | Đổi cổng: `uvicorn ... --port 8001` hoặc `OMNI_PORT=8001` với Docker |
-| Docker: `error during connect` | Docker Desktop chưa chạy |
-| Giao diện không cập nhật sau khi sửa | Tải lại trang bằng Ctrl + F5 để bỏ cache |
+| Vấn đề                                       | Cách xử lý                                                                                   |
+| ----------------------------------------------- | ----------------------------------------------------------------------------------------------- |
+| Tìm kiếm Hub lỗi / timeout                   | Kiểm tra kết nối Internet, proxy; model gated cần token                                     |
+| Tải model báo lỗi 401/403                    | Model gated/private → chấp nhận điều khoản trên Hugging Face và nhập token             |
+| "Tải xuống bị gián đoạn"                  | Server bị tắt khi đang tải → bấm**Thử lại**                                       |
+| Hết RAM khi chat                               | Dùng model nhỏ hơn, giảm Max tokens, bấm**Giải phóng model**                       |
+| Hết RAM/VRAM khi fine-tune                     | Bật LoRA, giảm batch size (tăng grad. accumulation), giảm max length, đặt giới hạn mẫu |
+| Model trả lời lặp / vô nghĩa               | Dùng model*Instruct/Chat*, tăng repetition penalty, giảm temperature                       |
+| Không nạp được model ("trust_remote_code") | Model yêu cầu code tuỳ biến — chọn model khác                                            |
+| Dataset báo thiếu cột                        | Kiểm tra lại ánh xạ cột ở bước 3; CSV có BOM/dấu phẩy phải đúng định dạng      |
+| Job ở trạng thái "Server khởi động lại"  | Server tắt khi đang huấn luyện → tạo lại job                                             |
+| Cổng 8000 đã bị dùng                       | Đổi cổng:`uvicorn ... --port 8001` hoặc `OMNI_PORT=8001` với Docker                    |
+| Docker:`error during connect`                 | Docker Desktop chưa chạy                                                                      |
+| Giao diện không cập nhật sau khi sửa       | Tải lại trang bằng Ctrl + F5 để bỏ cache                                                  |
